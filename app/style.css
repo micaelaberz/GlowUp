@@ -51,6 +51,7 @@ display: flex;
 justify-content: space-between;
 list-style: none;
 margin: 0;
+padding: 0;
 }
 
 .nav-list li {
@@ -78,4 +79,10 @@ cursor: pointer;
 
 h2 {
 font-size: 24px;
+}
+
+.producto-item{
+    width: 200px;
+    height: 200px;
+    background-color: aqua;
 }
