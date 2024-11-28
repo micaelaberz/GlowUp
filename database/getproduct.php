@@ -4,7 +4,6 @@ require 'database.php'; // Incluye la conexión
 if (isset($_GET['paso_id'])) {
     $pasoId = $_GET['paso_id'];
 
-    // Corrección en la consulta SQL (falta una coma entre los campos)
     $query = "SELECT p.nombre_producto, p.descripcion, p.foto FROM productos p
               JOIN producto_paso pp ON p.id_producto = pp.id_producto
               JOIN pasos ps ON pp.id_paso = ps.id_pasos
@@ -33,7 +32,7 @@ if (isset($_GET['paso_id'])) {
         // Devuelve los productos en formato JSON
         echo json_encode($productos);
     } else {
-        echo json_encode(['mensaje' => 'No se encontraron productos para este paso.']);
+        echo json_encode(['mensaje' => "No se encontraron productos para este paso."]);
     }
 }
 ?>

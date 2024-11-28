@@ -1,86 +1,161 @@
-body{
+body {
     margin: 0;
-    height:100vh;
+    height: 100vh;
     width: 100%;
 }
-#head{
-    width:100%;
-    height:150px;
-    background-color: mediumaquamarine;
-    color:white;
+
+#head {
+    width: 100%;
+    height: 150px;
+    background-color: #86ddb0;
+    color: white;
     text-align: center;
-    font-family: "SansSerif", ui-sans-serif;
-}
-h1{
-    margin-top: 0;
-    font-size:100px;
-    text-align: center;
-    margin-bottom: 0;
+    font-family: "SansSerif", monospace;
 }
 
-h2#bien{
-    margin-top: 0;
-    font-size:20px;
+h1 {
+    margin: auto;
+    font-size: 70px;
+    text-align: center;
+    font-family: 'Pacifico', cursive;
+    color: #e1feef;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
 }
-div#contenedor{
-    display: flex;
-    flex-direction: row;
-    margin: 20px;
+
+
+#bien {
+    position: absolute;
+    top: 20%;
+    /* Position vertically in the middle */
+    left: 50%;
+    /* Position horizontally in the middle */
+    transform: translate(-50%, -50%);
+    /* Adjust to center the text */
+    color: white;
+    /* Text color */
+    font-size: 36px;
+    /* Text size */
+    letter-spacing: 5px;
+    font-family: 'Bebas Neue', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
-.elem{
+
+.texto {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Centers horizontally and vertically */
+    font-size: 25px;
+    color: white;
+    font-family: 'Parkinsans', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+
+
+}
+
+#contenedor {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    background-image: url('minimalistic-science-banner-with-sample.jpg');
+    /* Replace with your image URL */
+    background-size: cover;
+    background-position: center;
+    top: 30px;
+}
+
+.elem {
     background-color: white;
     border: groove;
-    width:150px;
-    height:150px;
-    border-radius:15px;
+    width: 150px;
+    height: 150px;
+    border-radius: 15px;
     box-shadow: 10px 5px 30px lightgray;
     margin: 20px;
     overflow: hidden;
 }
-img{
-height: 100%;
-width: 100%;
+
+img {
+    height: 100%;
+    width: 100%;
 }
+
 .navbar {
-background-color: #b0faea;
-display: block;
+    background-color: #8bbaa2;
+    display: block;
+    height: 10%;
 }
 
 .nav-list {
-display: flex;
-justify-content: space-between;
-list-style: none;
-margin: 0;
-padding: 0;
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: 100%;
 }
 
 .nav-list li {
-margin: 0;
-flex: 1;
+    align-items: center;
+    /* Vertically center the buttons */
+    justify-content: center;
+    flex: 1;
 }
 
 .nav-list button {
-color: #273746;
-background-color: transparent;
-border: none;
-padding: 15px;
-font-size: 20px;
-border-radius: 5px;
-display: block;
-width: 100%; /* Hace que el botón ocupe todo el espacio disponible en el li */
-text-align: center;
+    color: #edfef5;
+    background-color: transparent;
+    border: none;
+    padding: 15px;
+    font-size: 20px;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+    /* Hace que el botón ocupe todo el espacio disponible en el li */
+    height: 100%;
+    text-align: center;
 }
 
 .nav-list button:hover {
-background-color: #b6ffee;
-border-radius: 5px;
-cursor: pointer;
+    background-color: #92deb7;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.5s ease, transform 0.6s ease; /* Add transition effect */
 }
 
 h2 {
-font-size: 24px;
+    font-size: 24px;
 }
 
+.enviar {
+    background-color: #8fecbc;
+
+
+    color: #1b2c23;
+    border-radius: 5px;
+    height: 10%;
+    width: 10%;
+    position: absolute;
+    top: 53%;
+    left:45%;
+    font-size: 24px;
+    border: 0;
+
+
+}
+
+.enviar:hover {
+    cursor: pointer;
+    transition: background-color 0.5s ease, transform 0.6s ease; /* Add transition effect */
+    background-color: #91d7b3;
+color: #121e18;
+transform: scale(1.1); /* Slightly enlarge button on hover */
+
+}
 
 .producto-item {
     border: 1px solid #ddd;
@@ -110,9 +185,47 @@ font-size: 24px;
 .producto-descripcion {
     padding: 10px;
     color: #333;
-    display: none; /* Ocultar descripción inicialmente */
+    display: none;
+    /* Ocultar descripción inicialmente */
 }
 
 .producto-item:hover .producto-descripcion {
-    display: block; /* Mostrar descripción en hover */
+    display: block;
+    /* Mostrar descripción en hover */
 }
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black with opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be adjusted */
+  }
+  
+  /* Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
