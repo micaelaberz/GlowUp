@@ -1,5 +1,5 @@
 <?php
-require 'database.php'; // Incluye la conexión
+require 'database.php'; 
 
 if (isset($_GET['paso_id'])) {
     $pasoId = $_GET['paso_id'];
@@ -9,17 +9,14 @@ if (isset($_GET['paso_id'])) {
               JOIN pasos ps ON pp.id_paso = ps.id_pasos
               WHERE ps.id_pasos = :pasoId";
 
-    // Usar PDO para ejecutar la consulta
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':pasoId', $pasoId, PDO::PARAM_INT);
 
     $stmt->execute();
 
-    // Recuperar los resultados
     $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if ($productos) {
-        // Convertir la foto (que es binaria) a Base64 para cada producto
         foreach ($productos as &$producto) {
             if ($producto['foto']) {
                 // Convertir la imagen binaria a Base64

@@ -1,6 +1,6 @@
 <?php
 
-require("database.php"); // Archivo con la conexión a la base de datos
+require("database.php"); 
 
 // Endpoint base de la API de Mercado Libre
 $endpoint = "https://api.mercadolibre.com/sites/MLA/search?q=serum";
@@ -31,7 +31,7 @@ $texturas = [
     "Aceite" => 5,
     "Tónico" => 6,
     "Agua Micelar" => 7,
-    "Leche" => 1 // Tratar "leche" como "crema"
+    "Leche" => 1 
 ];
 $excluir = ["Kit", "Ducha", "Gel de Baño","Cuerpo","Manos","Corporal","Spray","Combo","Emulsión"];
 
@@ -39,19 +39,17 @@ $excluir = ["Kit", "Ducha", "Gel de Baño","Cuerpo","Manos","Corporal","Spray","
 $response = file_get_contents($endpoint);
 $data = json_decode($response, true);
 
-// Verificar si hay resultados
 if (isset($data['results']) && is_array($data['results'])) {
     $productosCargados = 0; // Contador de productos procesados
     foreach ($data['results'] as $item) {
         // Extraer datos del producto
         $nombre_producto = $item['title'];
         $foto = $item['thumbnail']; // Foto en base64
-        $descripcion = $item['title']; // Usamos el título como descripción por defecto
-        $brand = $item['attributes'][0]['value_name'] ?? ''; // Marca si está disponible
+        $descripcion = $item['title']; 
+        $brand = $item['attributes'][0]['value_name'] ?? ''; 
         $volumen = null;
         $unidad = null;
 
-        // Eliminar "X" o "x" del nombre solo en la cantidad (e.g. x120 ml)
         $nombre_producto = preg_replace('/\bx(\d+)\s*(ml|gr)\b/i', '$1 $2', $nombre_producto);
 
         // Verificar si la marca está en nuestra lista
