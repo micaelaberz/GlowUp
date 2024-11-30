@@ -24,14 +24,7 @@
 
 
 <nav class="navbar">
-    <ul class="nav-list">
-        <li><button class="step-btn" data-step="1">1. Limpieza</button></li>
-        <li><button class="step-btn" data-step="2">2. Exfoliación</button></li>
-        <li><button class="step-btn" data-step="3">3. Tonificación</button></li>
-        <li><button class="step-btn" data-step="4">4. Serum</button></li>
-        <li><button class="step-btn" data-step="5">5. Contorno de ojos</button></li>
-        <li><button class="step-btn" data-step="6">6. Hidratación</button></li>
-        <li><button class="step-btn" data-step="7">7. Protección solar</button></li>
+    <ul class="nav-list" id="stepList">
     </ul>
 </nav>
 
@@ -45,8 +38,9 @@
             <div class="modal-content">
               <span class="close">&times;</span>
             <h2 id="tituloform">Empecemos a armar tu rutina</h2>
+           
             <form id="modalForm">
-            
+     
                 <label for="steps">¿Cuántos pasos quieres que tenga?</label>
                 <div class="slidecontainer">
                   <input type="range" class="slider" id="steps" name="steps" min="3" max="7" value="3" oninput="updateStepsValue(this.value)">

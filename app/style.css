@@ -107,13 +107,14 @@ img {
     background-color: transparent;
     border: none;
     padding: 15px;
-    font-size: 20px;
+    font-size: 15px;
     border-radius: 5px;
     display: block;
     width: 100%;
-    /* Hace que el botón ocupe todo el espacio disponible en el li */
     height: 100%;
     text-align: center;
+    font-family: 'Parkinsans', sans-serif;
+
 }
 
 .nav-list button:hover {
@@ -195,6 +196,7 @@ transform: scale(1.1); /* Slightly enlarge button on hover */
 /* Estilos para el modal */
 .modal {
     display: none; /* Oculto por defecto */
+
     position: fixed;
     z-index: 1;
     left: 0;
@@ -204,6 +206,8 @@ transform: scale(1.1); /* Slightly enlarge button on hover */
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
         font-family: 'Parkinsans', sans-serif;
+        transition: opacity 0.8s ease; /* Transición suave para el desvanecimiento */
+
 
 }
 
@@ -265,7 +269,7 @@ input[type="submit"] {
     background-color: #8fecbc;
     color: #1b2c23;
     border-radius: 5px;
-    height:20%;
+    height:20%; 
     width: 30%;
     padding: 10px 20px;
     border: none;

@@ -1,63 +1,129 @@
 $(document).ready(function() {
-    $('.step-btn').click(function() {
-        var pasoId = $(this).data('step');  // Obtiene el 'data-step' del botón
+    $.ajax({
+        url: '../database/getsteps.php', // Archivo PHP que devuelve los pasos
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            if (data && data.length > 0) {
+                $('.nav-list').empty(); 
+
+                data.forEach(function(step) {
+                    if (step.nombre_paso) {
+                        // Crear el elemento <li> para cada paso
+                        var stepItem = $('<li></li>')
+                            .append('<button class="step-btn" data-step="' + step.nombre_paso + '">' + step.nombre_paso + '</button>');
+
+                        // Agregar el <li> al <ul> con clase 'nav-list'
+                        $('.nav-list').append(stepItem);
+                    } else {
+                        console.log('Nombre de paso no encontrado');
+                    }
+                });
+            } else {
+                console.log('No se encontraron pasos');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log('Error al obtener los pasos:', error);
+        }
+    });
+});
+
+$(document).ready(function() {
+    $('#modalForm').submit(function(event) {
+        event.preventDefault();  
+
+        var selectedSteps = $('#steps').val();  
+
+       // console.log("Pasos seleccionados: ", selectedSteps); 
 
         $.ajax({
-            url: '../database/getproduct.php', 
-            method: 'GET',
-            data: { paso_id: pasoId },  // Pasa el id del paso correctamente
-            success: function(response) {
-                var productos = JSON.parse(response); // Parseamos la respuesta JSON
-                $('#contenedor').empty(); // Limpiamos el contenedor antes de agregar los nuevos productos
-            
-                // Itera sobre cada producto y crea un div para cada uno
-                productos.forEach(function(producto) {
-                    console.log(producto.foto);  // Verifica la URL/Base64 de la imagen
+            url: '../database/getthatstep.php', 
+            type: 'GET',
+            data: { steps: selectedSteps }, 
+            dataType: 'json',
+            success: function(data) {
+                console.log(data); 
 
-                    var productoDiv = $('<div></div>').addClass('producto-item');
-                    
-                    // Contenedor de imagen
-                    var imagenDiv = $('<div></div>').addClass('producto-imagen');
-                    
-                    // Verifica si la imagen está disponible
-                    if (producto.foto) {
-                        // Si la foto es Base64 (asegúrate que el backend la envíe correctamente)
-                        if (producto.foto.startsWith("data:image")) {
-                            imagenDiv.append('<img src="' + producto.foto + '" alt="' + producto.nombre_producto + '">');
-                        } else {
-                            // Si es una URL normal, la usa como fuente de la imagen
-                            imagenDiv.append('<img src="' + producto.foto + '" alt="' + producto.nombre_producto + '">');
+                if (data && data.length > 0) {
+                    $('.nav-list').empty(); 
+
+                    data.forEach(function(step) {
+                        if (step.nombre_paso) {
+                            var stepItem = $('<li></li>')
+                                .append('<button class="step-btn" data-step="' + step.nombre_paso + '">' + step.nombre_paso + '</button>');
+
+                            $('.nav-list').append(stepItem);
                         }
-                    } else {
-                        // Si no hay imagen, puedes poner una imagen por defecto
-                        imagenDiv.append('<img src="https://via.placeholder.com/150" alt="Imagen no disponible">');
-                    }
-            
-                    // Contenedor para el nombre con fondo transparente
-                    var nombreDiv = $('<div></div>').addClass('producto-nombre');
-                    nombreDiv.text(producto.nombre_producto);
-                    
-                    // Contenedor para la descripción (puede mostrarse en hover o expandirse)
-                    var descripcionDiv = $('<div></div>').addClass('producto-descripcion');
-                    descripcionDiv.text(producto.descripcion);
-                    
-                    // Agregar las partes al div principal
-                    productoDiv.append(imagenDiv);
-                    productoDiv.append(nombreDiv);
-                    productoDiv.append(descripcionDiv);
-                    
-                    // Agregar el div del producto al contenedor principal
-                    $('#contenedor').append(productoDiv);
-                });
+                    });
+                } else {
+                    console.log('No se encontraron pasos');
+                }
+                $('#myModal').hide(); 
             },
-            error: function() {
-                alert('Hubo un error al cargar los productos');
+            error: function(xhr, status, error) {
+                console.log('Error al obtener los pasos:', error);
             }
         });
     });
 });
 
+$(document).on('click', '.step-btn', function() {
+    var pasoId = $(this).data('step');  // Obtiene el 'data-step' del botón
 
+    $.ajax({
+        url: '../database/getproduct.php',
+        method: 'GET',
+        data: { paso_id: pasoId },  // Pasa el id del paso correctamente
+        success: function(response) {
+            var productos = JSON.parse(response); // Parseamos la respuesta JSON
+            $('#contenedor').empty(); // Limpiamos el contenedor antes de agregar los nuevos productos
+        
+            // Itera sobre cada producto y crea un div para cada uno
+            productos.forEach(function(producto) {
+                console.log(producto.foto);  // Verifica la URL/Base64 de la imagen
+
+                var productoDiv = $('<div></div>').addClass('producto-item');
+                
+                // Contenedor de imagen
+                var imagenDiv = $('<div></div>').addClass('producto-imagen');
+                
+                // Verifica si la imagen está disponible
+                if (producto.foto) {
+                    // Si la foto es Base64 (asegúrate que el backend la envíe correctamente)
+                    if (producto.foto.startsWith("data:image")) {
+                        imagenDiv.append('<img src="' + producto.foto + '" alt="' + producto.nombre_producto + '">');
+                    } else {
+                        // Si es una URL normal, la usa como fuente de la imagen
+                        imagenDiv.append('<img src="' + producto.foto + '" alt="' + producto.nombre_producto + '">');
+                    }
+                } else {
+                    // Si no hay imagen, puedes poner una imagen por defecto
+                    imagenDiv.append('<img src="https://via.placeholder.com/150" alt="Imagen no disponible">');
+                }
+        
+                // Contenedor para el nombre con fondo transparente
+                var nombreDiv = $('<div></div>').addClass('producto-nombre');
+                nombreDiv.text(producto.nombre_producto);
+                
+                // Contenedor para la descripción (puede mostrarse en hover o expandirse)
+                var descripcionDiv = $('<div></div>').addClass('producto-descripcion');
+                descripcionDiv.text(producto.descripcion);
+                
+                // Agregar las partes al div principal
+                productoDiv.append(imagenDiv);
+                productoDiv.append(nombreDiv);
+                productoDiv.append(descripcionDiv);
+                
+                // Agregar el div del producto al contenedor principal
+                $('#contenedor').append(productoDiv);
+            });
+        },
+        error: function() {
+            alert('Hubo un error al cargar los productos');
+        }
+    });
+});
 
 
 
@@ -124,6 +190,8 @@ window.onclick = function(event) {
 //     });
 // });
 
+// estilo para q se vean los numeros en la barra
 function updateStepsValue(value) {
     document.getElementById("stepValueDisplay").innerText = value;
   }
+
