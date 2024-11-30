@@ -123,3 +123,7 @@ window.onclick = function(event) {
 //         });
 //     });
 // });
+
+function updateStepsValue(value) {
+    document.getElementById("stepValueDisplay").innerText = value;
+  }
