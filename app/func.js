@@ -1,34 +1,8 @@
-$(document).ready(function() {
-    $.ajax({
-        url: '../database/getsteps.php', // Archivo PHP que devuelve los pasos
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-            if (data && data.length > 0) {
-                $('.nav-list').empty(); 
 
-                data.forEach(function(step) {
-                    if (step.nombre_paso) {
-                        // Crear el elemento <li> para cada paso
-                        var stepItem = $('<li></li>')
-                            .append('<button class="step-btn" data-step="' + step.nombre_paso + '">' + step.nombre_paso + '</button>');
 
-                        // Agregar el <li> al <ul> con clase 'nav-list'
-                        $('.nav-list').append(stepItem);
-                    } else {
-                        console.log('Nombre de paso no encontrado');
-                    }
-                });
-            } else {
-                console.log('No se encontraron pasos');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.log('Error al obtener los pasos:', error);
-        }
-    });
-});
 
+
+//funcion para seleccionar cantidad de pasos
 $(document).ready(function() {
     $('#modalForm').submit(function(event) {
         event.preventDefault();  
@@ -47,11 +21,15 @@ $(document).ready(function() {
 
                 if (data && data.length > 0) {
                     $('.nav-list').empty(); 
+                    var paso = 0; 
+
 
                     data.forEach(function(step) {
                         if (step.nombre_paso) {
+                            paso++; // Incrementa el paso
+
                             var stepItem = $('<li></li>')
-                                .append('<button class="step-btn" data-step="' + step.nombre_paso + '">' + step.nombre_paso + '</button>');
+                                .append('<button class="step-btn" data-step="' + paso + '">' + step.nombre_paso + '</button>');
 
                             $('.nav-list').append(stepItem);
                         }
@@ -68,26 +46,31 @@ $(document).ready(function() {
     });
 });
 
+
+
+//funcion para mostrar productos
 $(document).on('click', '.step-btn', function() {
     var pasoId = $(this).data('step');  // Obtiene el 'data-step' del botón
+    var nombrePaso = $(this).text();    // Obtiene el nombre del paso desde el texto del botón
+
+    //alert("el paso es"+pasoId);
 
     $.ajax({
         url: '../database/getproduct.php',
         method: 'GET',
-        data: { paso_id: pasoId },  // Pasa el id del paso correctamente
+        data: { paso_id: pasoId },  
         success: function(response) {
-            var productos = JSON.parse(response); // Parseamos la respuesta JSON
-            $('#contenedor').empty(); // Limpiamos el contenedor antes de agregar los nuevos productos
-        
-            // Itera sobre cada producto y crea un div para cada uno
-            productos.forEach(function(producto) {
-                console.log(producto.foto);  // Verifica la URL/Base64 de la imagen
+            var productos = JSON.parse(response); 
+            $('#contenedor').empty(); 
+            $('#contenedor').addClass('contpro'); 
 
-                var productoDiv = $('<div></div>').addClass('producto-item');
+
+            productos.forEach(function(producto) {
                 
-                // Contenedor de imagen
+                
+                var productoDiv = $('<div></div>').addClass('producto-item').data('id-producto', producto.id_producto).data('nombre-paso', producto.nombre_paso); 
                 var imagenDiv = $('<div></div>').addClass('producto-imagen');
-                
+
                 // Verifica si la imagen está disponible
                 if (producto.foto) {
                     // Si la foto es Base64 (asegúrate que el backend la envíe correctamente)
@@ -125,6 +108,31 @@ $(document).on('click', '.step-btn', function() {
     });
 });
 
+
+
+
+//funcion para mostrar rutina + agregado solo visual
+$(document).on('click', '.producto-item', function() {
+    var productoId = $(this).data('id-producto'); 
+    var paso = $(this).data('nombre-paso');    
+
+    var productoNombre = $(this).find('div').text(); 
+    
+    $('.fixed-routine').show(); 
+
+    var nuevoElemento = $('<li></li>')  
+        .text(productoNombre); 
+
+    var pasoDiv = $('<div></div>').addClass('producto-paso')
+        .text("Paso: " + paso); 
+
+    nuevoElemento.append(pasoDiv);
+
+    nuevoElemento.data('id-producto', productoId); 
+    nuevoElemento.data('paso', paso); 
+
+    $('#routine-list').append(nuevoElemento);
+});
 
 
 var modal = document.getElementById("myModal");

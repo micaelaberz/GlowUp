@@ -2,9 +2,23 @@ body {
     margin: 0;
     height: 100vh;
     width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-#head {
+#pie{
+    width: 100%;
+    position: fixed;
+    height: 150px;
+    background-color: #86ddb0;
+    color: white;
+    text-align: center;
+    font-family: "SansSerif", monospace;
+}
+
+header{
     width: 100%;
     height: 150px;
     background-color: #86ddb0;
@@ -22,11 +36,15 @@ h1 {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 
 }
+#titulo{
+margin-bottom: 20px;
+
+}
 
 
 #bien {
     position: absolute;
-    top: 10vh;  
+    top: 10vh;
     left: 50%;
     /* Position horizontally in the middle */
     transform: translate(-50%, -50%);
@@ -59,11 +77,23 @@ h1 {
     position: relative;
     width: 100%;
     height: 80vh;
+}
+
+#fondo {
     background-image: url('minimalistic-science-banner-with-sample.jpg');
-    /* Replace with your image URL */
     background-size: cover;
     background-position: center;
+    position: relative;
+    background-repeat: no-repeat;
+    display: flex;
+    /* Opcional: para centrar */
+    justify-content: center;
+    /* Opcional: centra horizontalmente */
+    align-items: center;
+    /* Opcional: centra verticalmente */
+
 }
+
 
 .elem {
     background-color: white;
@@ -77,14 +107,14 @@ h1 {
 }
 
 img {
-    height: 100%;
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%
 }
 
 .navbar {
     background-color: #8bbaa2;
     display: block;
-    height: 10%;
+    height: 15%;
 }
 
 .nav-list {
@@ -107,7 +137,7 @@ img {
     background-color: transparent;
     border: none;
     padding: 15px;
-    font-size: 15px;
+    font-size: 1.5vw;
     border-radius: 5px;
     display: block;
     width: 100%;
@@ -122,7 +152,8 @@ img {
     border-radius: 5px;
     cursor: pointer;
     color: white;
-    transition: background-color 0.5s ease, transform 0.6s ease; /* Add transition effect */
+    transition: background-color 0.5s ease, transform 0.6s ease;
+    /* Add transition effect */
 }
 
 h2 {
@@ -141,7 +172,7 @@ h2 {
     width: 15%;
     position: absolute;
     top: 53%;
-    left:45%;
+    left: 45%;
     font-size: 24px;
     border: 0;
 
@@ -150,10 +181,12 @@ h2 {
 
 .enviar:hover {
     cursor: pointer;
-    transition: background-color 0.5s ease, transform 0.6s ease; /* Add transition effect */
+    transition: background-color 0.5s ease, transform 0.6s ease;
+    /* Add transition effect */
     background-color: #91d7b3;
-color: #121e18;
-transform: scale(1.1); /* Slightly enlarge button on hover */
+    color: #121e18;
+    transform: scale(1.1);
+    /* Slightly enlarge button on hover */
 
 }
 
@@ -162,41 +195,35 @@ transform: scale(1.1); /* Slightly enlarge button on hover */
     padding: 10px;
     margin: 10px;
     width: 200px;
-    text-align: center;
+    height: 250px;
     position: relative;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    cursor: pointer;
 }
 
-.producto-imagen img {
-    width: 100%;
-    height: auto;
-}
 
 .producto-nombre {
     background-color: rgba(0, 0, 0, 0.5);
-    color: white;
+    /* color: white;
     padding: 5px;
     position: absolute;
     bottom: 10px;
     width: 100%;
-    text-align: center;
+    text-align: center; */
 }
 
 .producto-descripcion {
-    padding: 10px;
+    margin: auto;
     color: #333;
-    display: none;
-    /* Ocultar descripción inicialmente */
 }
 
-.producto-item:hover .producto-descripcion {
-    display: block;
-    /* Mostrar descripción en hover */
-}
+
+
 /* Estilos para el modal */
 .modal {
-    display: none; /* Oculto por defecto */
-
+    display: none;
     position: fixed;
     z-index: 1;
     left: 0;
@@ -204,10 +231,9 @@ transform: scale(1.1); /* Slightly enlarge button on hover */
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
-        font-family: 'Parkinsans', sans-serif;
-        transition: opacity 0.8s ease; /* Transición suave para el desvanecimiento */
-
+    background-color: rgba(0, 0, 0, 0.5);
+    font-family: 'Parkinsans', sans-serif;
+    transition: opacity 0.8s ease;
 
 }
 
@@ -217,11 +243,16 @@ transform: scale(1.1); /* Slightly enlarge button on hover */
     margin: 10% auto;
     height: 60%;
     padding: 20px;
-    border-radius: 15px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
-    width: 50%; /* Ancho del modal */
-    max-width: 600px; /* Máximo ancho */
-    text-align: center; /* Centrado del texto */
+    border-radius: 15px;
+    /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Sombra */
+    width: 50%;
+    /* Ancho del modal */
+    max-width: 600px;
+    /* Máximo ancho */
+    text-align: center;
+    /* Centrado del texto */
     font-family: 'Parkinsans', sans-serif;
 }
 
@@ -250,16 +281,17 @@ form {
     display: flex;
     flex-direction: column;
     gap: 15px;
-  }
+}
 
 
 label {
-  font-size: 16px;
-  color: #333;
-  font-weight: 600;
-  margin-bottom: 8px;
-}   
-#tituloform{
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+#tituloform {
     font: bold;
     font-size: 30px;
 }
@@ -269,7 +301,7 @@ input[type="submit"] {
     background-color: #8fecbc;
     color: #1b2c23;
     border-radius: 5px;
-    height:20%; 
+    height: 20%;
     width: 30%;
     padding: 10px 20px;
     border: none;
@@ -299,9 +331,11 @@ input[type="submit"]:hover {
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
-  }
-  
-  .slider::-webkit-slider-thumb {
+    cursor: pointer;
+
+}
+
+.slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 25px;
@@ -309,20 +343,66 @@ input[type="submit"]:hover {
     border-radius: 50%;
     background: #04AA6D;
     cursor: pointer;
-  }
-  
-  .slider::-moz-range-thumb {
+}
+
+.slider::-moz-range-thumb {
     width: 25px;
     height: 25px;
     border-radius: 50%;
     background: #04AA6D;
     cursor: pointer;
-  }
-  
-  /* Para alinear el texto junto al slider */
-  #stepValueDisplay {
+}
+
+/* Para alinear el texto junto al slider */
+#stepValueDisplay {
     font-size: 18px;
     font-weight: bold;
-    margin-left: 10px; /* Espacio entre el slider y el número */
+    margin-left: 10px;
+    /* Espacio entre el slider y el número */
     color: #04AA6D;
-  }
+}
+
+.contpro {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+}
+.fixed-routine {
+    position: fixed;   
+    bottom: 0;         
+    left: 0;
+    width: 100%;       
+    background-color: #444;
+    color: white;
+    padding: 20px 10px;  
+    box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.3); 
+    text-align: left;  
+    overflow-y: auto;  
+    max-height: 200px;  
+}
+
+#routine-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 60%;
+}
+
+#routine-list li {
+    margin: 5px 0;
+    font-size: 16px;
+    background-color: #666;
+    padding: 8px;
+    border-radius: 5px;
+}
+.producto-paso {
+    display: inline-block;        /* Para que esté en línea con el texto del nombre */
+    background-color: #f1f1f1;    /* Fondo gris claro */
+    padding: 5px 10px;            /* Espaciado interno */
+    margin-left: 10px;            /* Espacio entre el nombre del producto y el paso */
+    font-size: 12px;              /* Tamaño de texto pequeño */
+    border-radius: 5px;           /* Bordes redondeados */
+    color: #333;                  /* Color de texto */
+    font-weight: bold;            /* Texto en negrita */
+}

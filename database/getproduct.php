@@ -4,7 +4,7 @@ require 'database.php';
 if (isset($_GET['paso_id'])) {
     $pasoId = $_GET['paso_id'];
 
-    $query = "SELECT p.nombre_producto, p.descripcion, p.foto FROM productos p
+    $query = "SELECT p.nombre_producto, p.descripcion, p.foto, ps.nombre_paso FROM productos p
               JOIN producto_paso pp ON p.id_producto = pp.id_producto
               JOIN pasos ps ON pp.id_paso = ps.id_pasos
               WHERE ps.id_pasos = :pasoId";
@@ -24,6 +24,7 @@ if (isset($_GET['paso_id'])) {
                 // Asegurarse de que la imagen esté en formato adecuado para un <img src="data:image/png;base64,...">
                 $producto['foto'] = 'data:image/jpeg;base64,' . $producto['foto']; // Cambiar el formato a JPEG si es necesario
             }
+            
         }
 
         // Devuelve los productos en formato JSON
