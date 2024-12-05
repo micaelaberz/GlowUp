@@ -3,7 +3,7 @@
 ¿Qué es?
 GlowUp es una aplicación web sencilla y fácil de usar, desarrollada con PHP, JavaScript y CSS. Permite a los usuarios crear y gestionar rutinas de cuidado de la piel, hacer un seguimiento de su progreso y recibir recomendaciones de productos basadas en su rutina. El objetivo de este proyecto es ofrecer una experiencia personalizada de cuidado de la piel con el mínimo esfuerzo.
 
-Pagina web: glowup.micaelaberzoni.website
+Pagina web: https://glowup.micaelaberzoni.website
 
 ¿Por qué hacerlo?
 Este README tiene como objetivo proporcionar la información básica para entender el propósito del proyecto y cómo contribuir. Responde preguntas frecuentes sobre cómo instalar y usar la aplicación, así como cómo colaborar en su desarrollo.
