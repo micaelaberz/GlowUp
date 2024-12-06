@@ -3,28 +3,28 @@
 
 
 //funcion para seleccionar cantidad de pasos
-$(document).ready(function() {
-    $('#modalForm').submit(function(event) {
-        event.preventDefault();  
+$(document).ready(function () {
+    $('#modalForm').submit(function (event) {
+        event.preventDefault();
 
-        var selectedSteps = $('#steps').val();  
+        var selectedSteps = $('#steps').val();
 
-       // console.log("Pasos seleccionados: ", selectedSteps); 
+        // console.log("Pasos seleccionados: ", selectedSteps); 
 
         $.ajax({
-            url: '../database/getthatstep.php', 
+            url: '../database/getthatstep.php',
             type: 'GET',
-            data: { steps: selectedSteps }, 
+            data: { steps: selectedSteps },
             dataType: 'json',
-            success: function(data) {
-                console.log(data); 
+            success: function (data) {
+                console.log(data);
 
                 if (data && data.length > 0) {
-                    $('.nav-list').empty(); 
-                    var paso = 0; 
+                    $('.nav-list').empty();
+                    var paso = 0;
 
 
-                    data.forEach(function(step) {
+                    data.forEach(function (step) {
                         if (step.nombre_paso) {
                             paso++; // Incrementa el paso
 
@@ -37,9 +37,9 @@ $(document).ready(function() {
                 } else {
                     console.log('No se encontraron pasos');
                 }
-                $('#myModal').hide(); 
+                $('#myModal').hide();
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.log('Error al obtener los pasos:', error);
             }
         });
@@ -49,105 +49,158 @@ $(document).ready(function() {
 
 
 //funcion para mostrar productos
-$(document).on('click', '.step-btn', function() {
+$(document).on('click', '.step-btn', function () {
     var pasoId = $(this).data('step');  // Obtiene el 'data-step' del botón
-    var nombrePaso = $(this).text();    // Obtiene el nombre del paso desde el texto del botón
-
     //alert("el paso es"+pasoId);
 
     $.ajax({
         url: '../database/getproduct.php',
         method: 'GET',
-        data: { paso_id: pasoId },  
-        success: function(response) {
-            var productos = JSON.parse(response); 
-            $('#contenedor').empty(); 
-            $('#contenedor').addClass('contpro'); 
+        data: { paso_id: pasoId },
+        success: function (response) {
+            var productos = JSON.parse(response);
+            $('#contenedor').empty();
+            $('#contenedor').addClass('contpro');
 
 
-            productos.forEach(function(producto) {
-                
-                
-                var productoDiv = $('<div></div>').addClass('producto-item').data('id-producto', producto.id_producto).data('nombre-paso', producto.nombre_paso); 
-                var imagenDiv = $('<div></div>').addClass('producto-imagen');
+            productos.forEach(function (producto) {
 
-                // Verifica si la imagen está disponible
+
+                var productoDiv = document.createElement("div");
+                productoDiv.id = producto.id_producto;
+
+                productoDiv.classList.add("producto-item");
+                productoDiv.setAttribute("data-idprod", producto.id_producto);
+                productoDiv.setAttribute("data-idpaso", producto.id_pasos);
+                productoDiv.setAttribute("data-nombre-paso", producto.nombre_paso);
+
+                var imagenDiv = document.createElement("div");
+                imagenDiv.classList.add("producto-imagen")
+
                 if (producto.foto) {
-                    // Si la foto es Base64 (asegúrate que el backend la envíe correctamente)
-                    if (producto.foto.startsWith("data:image")) {
-                        imagenDiv.append('<img src="' + producto.foto + '" alt="' + producto.nombre_producto + '">');
-                    } else {
-                        // Si es una URL normal, la usa como fuente de la imagen
-                        imagenDiv.append('<img src="' + producto.foto + '" alt="' + producto.nombre_producto + '">');
-                    }
-                } else {
-                    // Si no hay imagen, puedes poner una imagen por defecto
-                    imagenDiv.append('<img src="https://via.placeholder.com/150" alt="Imagen no disponible">');
+                    var imagen = document.createElement("img");
+                    imagen.src = producto.foto; // Usa la URL o Base64 como fuente
+                    imagen.alt = producto.nombre_producto || "Producto sin nombre";
+                    imagenDiv.appendChild(imagen); // Agrega la imagen al div
                 }
-        
-                // Contenedor para el nombre con fondo transparente
-                var nombreDiv = $('<div></div>').addClass('producto-nombre');
-                nombreDiv.text(producto.nombre_producto);
-                
-                // Contenedor para la descripción (puede mostrarse en hover o expandirse)
-                var descripcionDiv = $('<div></div>').addClass('producto-descripcion');
-                descripcionDiv.text(producto.descripcion);
-                
-                // Agregar las partes al div principal
-                productoDiv.append(imagenDiv);
-                productoDiv.append(nombreDiv);
-                productoDiv.append(descripcionDiv);
-                
-                // Agregar el div del producto al contenedor principal
+                else if (producto.imagen_base64) {
+                    var imagen = document.createElement("img");
+                    imagen.src = producto.imagen_base64;
+                    imagenDiv.appendChild(imagen); // Agrega la imagen al div
+
+                }
+                else {
+                    var imagenPorDefecto = document.createElement("img");
+                    imagenPorDefecto.src = "minimalistic-science-banner-with-sample.jpg"; // URL de la imagen por defecto
+                    imagenPorDefecto.alt = "Imagen no disponible";
+                    imagenDiv.appendChild(imagenPorDefecto); // Agrega la imagen por defecto al div
+                }
+
+
+                var nombreDiv = document.createElement("div");
+                nombreDiv.classList.add("producto-nombre");
+                nombreDiv.setAttribute("nombreproducto", producto.nombre_producto);
+                nombreDiv.textContent = producto.nombre_producto;
+
+
+                var descripcionDiv = document.createElement("div");
+                descripcionDiv.classList.add("producto-descripcion");
+                descripcionDiv.textContent = producto.descripcion;
+
+
+                productoDiv.appendChild(imagenDiv);
+                productoDiv.appendChild(nombreDiv);
+                productoDiv.appendChild(descripcionDiv);
+
                 $('#contenedor').append(productoDiv);
             });
         },
-        error: function() {
+        error: function () {
             alert('Hubo un error al cargar los productos');
         }
     });
 });
 
 
+/*
 
-
-//funcion para mostrar rutina + agregado solo visual
-$(document).on('click', '.producto-item', function() {
-    var productoId = $(this).data('id-producto'); 
-    var paso = $(this).data('nombre-paso');    
-
-    var productoNombre = $(this).find('div').text(); 
+$('#contenedor').on('click', '.producto-item', function () {
+    var idProducto = $(this).data('idprod'); // Obtener el ID del producto
+    var paso = $(this).data('nombre-paso');  // Obtener el nombre del paso
+    var idpaso = $(this).data('idpaso');     // Corregido: obtener el data-idpaso
+    var nombreProducto = $(this).find('.producto-nombre').text();  // Usando .text() en lugar de .textContent
     
-    $('.fixed-routine').show(); 
-
-    var nuevoElemento = $('<li></li>')  
-        .text(productoNombre); 
-
-    var pasoDiv = $('<div></div>').addClass('producto-paso')
-        .text("Paso: " + paso); 
-
-    nuevoElemento.append(pasoDiv);
-
-    nuevoElemento.data('id-producto', productoId); 
-    nuevoElemento.data('paso', paso); 
-
-    $('#routine-list').append(nuevoElemento);
+    console.log("ID Producto:", idProducto);
+    console.log("Nombre Paso:", paso);
+    console.log("ID Paso:", idpaso);
+    console.log("Nombre Producto:", nombreProducto);
 });
+
+
+*/
+var arrayprod = [];
+
+$(document).on('click', '.producto-item', function () {
+    var idProducto = $(this).data('idprod'); // Obtener el ID del producto
+    var paso = $(this).data('nombre-paso');
+    var idpaso = $(this).data('idpaso');     // Corregido: obtener el data-idpaso
+    var nombreProducto = $(this).find('.producto-nombre').text();  // Usando .text() en lugar de .textContent
+    $('.fixed-routine').show();
+
+    var productoExistente = arrayprod.find(function(producto) {
+        return producto.idProducto === idProducto;  // Comparar idProducto
+    });
+
+    if (productoExistente) {
+        alert("Producto ya agregado");
+        return;
+    } else {
+        // Agregar el producto al array si no está duplicado
+        arrayprod.push({
+            nombre: nombreProducto,
+            idProducto: idProducto,
+            idpaso: idpaso
+        });
+    }
+
+    // Crear un contenedor horizontal para la fila del producto + paso asociado
+    var productoRow = document.createElement("div");
+    productoRow.classList.add("'producto-row'");
+    productoRow.setAttribute("productorutina", idProducto);
+    productoRow.setAttribute("idpasorutina", idpaso);
+
+    // Crear el div solamente visual para el nombre del producto
+    var productoNombreDiv = document.createElement("div");
+    productoNombreDiv.classList.add('producto-nombre-cell')
+    productoNombreDiv.textContent = nombreProducto;
+
+    var pasoDiv = document.createElement("div");
+    pasoDiv.classList.add("producto-paso-cell");
+    pasoDiv.textContent = paso;
+
+
+    productoRow.append(productoNombreDiv)
+    productoRow.append(pasoDiv);
+
+    // Agregar la fila al contenedor de la rutina
+    $('#routine-list').append(productoRow);
+});
+
 
 
 var modal = document.getElementById("myModal");
 var btn = document.getElementById("enviar");
 var span = document.getElementsByClassName("close")[0];
-btn.onclick = function() {
-  modal.style.display = "block";
+btn.onclick = function () {
+    modal.style.display = "block";
 }
-span.onclick = function() {
-  modal.style.display = "none";
-}
-window.onclick = function(event) {
-  if (event.target == modal) {
+span.onclick = function () {
     modal.style.display = "none";
-  }
+}
+window.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
 }
 // $(document).ready(function() {
 //     // Cuando se hace clic en el botón
@@ -186,7 +239,7 @@ window.onclick = function(event) {
 //             img.alt = 'Imagen producto';
 //             img.style.width = '100px';  // Ajusta el tamaño si es necesario
 //             img.style.margin = '10px';
-            
+
 //             // Agregar la imagen al contenedor
 //             const contenedor = document.getElementById('contenedor');
 //             contenedor.innerHTML = '';  // Limpiar el contenedor
@@ -201,5 +254,5 @@ window.onclick = function(event) {
 // estilo para q se vean los numeros en la barra
 function updateStepsValue(value) {
     document.getElementById("stepValueDisplay").innerText = value;
-  }
+}
 

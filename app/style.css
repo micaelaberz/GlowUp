@@ -369,40 +369,45 @@ input[type="submit"]:hover {
 
 }
 .fixed-routine {
-    position: fixed;   
-    bottom: 0;         
+    position: fixed;
+    bottom: 0;
     left: 0;
-    width: 100%;       
+    width: 100%;
     background-color: #444;
     color: white;
-    padding: 20px 10px;  
-    box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.3); 
-    text-align: left;  
-    overflow-y: auto;  
-    max-height: 200px;  
+    padding: 20px 10px;
+    box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.3);
+    text-align: left;
+    overflow-y: auto;
+    max-height: 200px;
 }
 
+/* Estilo para la lista de rutina */
 #routine-list {
-    list-style-type: none;
     padding: 0;
     margin: 0;
     width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espacio entre las filas */
+    justify-content: space-around;
+    color: black;
 }
 
-#routine-list li {
-    margin: 5px 0;
-    font-size: 16px;
-    background-color: #666;
-    padding: 8px;
-    border-radius: 5px;
+/* Estilo para las filas del producto */
+.producto-row {
+    display: flex;
+    justify-content: space-between; /* Asegura que el nombre y paso estén separados */
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+    width: 100%;
+    box-sizing: border-box;
 }
-.producto-paso {
-    display: inline-block;        /* Para que esté en línea con el texto del nombre */
-    background-color: #f1f1f1;    /* Fondo gris claro */
-    padding: 5px 10px;            /* Espaciado interno */
-    margin-left: 10px;            /* Espacio entre el nombre del producto y el paso */
-    font-size: 12px;              /* Tamaño de texto pequeño */
-    border-radius: 5px;           /* Bordes redondeados */
-    color: #333;                  /* Color de texto */
-    font-weight: bold;            /* Texto en negrita */
+
+.producto-nombre-cell .producto-paso-cell{
+    width:100px;
+    background-color: pink;
+    color: black;
 }
