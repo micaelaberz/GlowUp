@@ -1,5 +1,18 @@
 
-
+var modal = document.getElementById("myModal");
+var btn = document.getElementById("enviar");
+var span = document.getElementsByClassName("close")[0];
+btn.onclick = function () {
+    modal.style.display = "block";
+}
+span.onclick = function () {
+    modal.style.display = "none";
+}
+window.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
 
 
 //funcion para seleccionar cantidad de pasos
@@ -121,51 +134,50 @@ $(document).on('click', '.step-btn', function () {
     });
 });
 
-
-/*
-
-$('#contenedor').on('click', '.producto-item', function () {
-    var idProducto = $(this).data('idprod'); // Obtener el ID del producto
-    var paso = $(this).data('nombre-paso');  // Obtener el nombre del paso
-    var idpaso = $(this).data('idpaso');     // Corregido: obtener el data-idpaso
-    var nombreProducto = $(this).find('.producto-nombre').text();  // Usando .text() en lugar de .textContent
-    
-    console.log("ID Producto:", idProducto);
-    console.log("Nombre Paso:", paso);
-    console.log("ID Paso:", idpaso);
-    console.log("Nombre Producto:", nombreProducto);
-});
-
-
-*/
 var arrayprod = [];
-
+//funcion para crear rutina y llenar array con productos
 $(document).on('click', '.producto-item', function () {
-    var idProducto = $(this).data('idprod'); // Obtener el ID del producto
+    var idProducto = $(this).data('idprod'); 
     var paso = $(this).data('nombre-paso');
-    var idpaso = $(this).data('idpaso');     // Corregido: obtener el data-idpaso
-    var nombreProducto = $(this).find('.producto-nombre').text();  // Usando .text() en lugar de .textContent
+    var idpaso = $(this).data('idpaso');    
+    var nombreProducto = $(this).find('.producto-nombre').text(); 
     $('.fixed-routine').show();
 
-    var productoExistente = arrayprod.find(function(producto) {
-        return producto.idProducto === idProducto;  // Comparar idProducto
+    var productoExistente = arrayprod.find(function (producto) {
+        return producto.idProducto === idProducto; 
     });
 
     if (productoExistente) {
         alert("Producto ya agregado");
         return;
     } else {
-        // Agregar el producto al array si no está duplicado
-        arrayprod.push({
-            nombre: nombreProducto,
-            idProducto: idProducto,
-            idpaso: idpaso
+        let contador = 0;
+        arrayprod.forEach(function(esteprod) {
+            if (esteprod.idpaso == idpaso) {
+                contador++;
+            }
         });
+        alert("Contador para el paso " + idpaso + ": " + contador);
+
+        if (contador >= 2) {
+            alert("Se recomienda usar solo 2 productos por paso.");
+            return; // Salimos de la función
+        } else {
+            arrayprod.push({
+                nombre: nombreProducto,
+                idProducto: idProducto,
+                idpaso: idpaso
+            });
+            actualizarContadorProductos();
+
+        }
     }
+    console.log(arrayprod);
+
 
     // Crear un contenedor horizontal para la fila del producto + paso asociado
     var productoRow = document.createElement("div");
-    productoRow.classList.add("'producto-row'");
+    productoRow.classList.add("producto-row");
     productoRow.setAttribute("productorutina", idProducto);
     productoRow.setAttribute("idpasorutina", idpaso);
 
@@ -178,30 +190,143 @@ $(document).on('click', '.producto-item', function () {
     pasoDiv.classList.add("producto-paso-cell");
     pasoDiv.textContent = paso;
 
+    var botoneliminar = document.createElement("button");
+    botoneliminar.classList.add('eliminar');
+    botoneliminar.textContent = "Eliminar";
+    botoneliminar.onclick = function() {
+        // Eliminar del array
+        arrayprod = arrayprod.filter(function(producto) {
+            return producto.idProducto !== idProducto || producto.idpaso !== idpaso;
+        });
+
+        // Actualizar el contador
+        let contador = 0;
+        arrayprod.forEach(function(esteprod) {
+            if (esteprod.idpaso == idpaso) {
+                contador++;
+            }
+        });
+        console.log("Contador actualizado para el paso " + idpaso + ": " + contador);
+        console.log(arrayprod);
+
+        productoRow.remove();
+        actualizarContadorProductos();
+
+    };
+
 
     productoRow.append(productoNombreDiv)
     productoRow.append(pasoDiv);
+    productoRow.append(botoneliminar);
 
     // Agregar la fila al contenedor de la rutina
     $('#routine-list').append(productoRow);
 });
 
-
-
-var modal = document.getElementById("myModal");
-var btn = document.getElementById("enviar");
-var span = document.getElementsByClassName("close")[0];
-btn.onclick = function () {
-    modal.style.display = "block";
+// Función para actualizar el contador de productos
+function actualizarContadorProductos() {
+    var contadorProductos = arrayprod.length;
+    $('#contador-productos').text(contadorProductos); // Actualiza el número en el HTML
 }
-span.onclick = function () {
-    modal.style.display = "none";
-}
-window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+$(document).on('click', '.confirmar-btn', function () {
+    crearrutina();  
+});
+//mandar rutina al php
+function crearrutina() {
+    if (arrayprod.length === 0) {
+        alert("No hay productos en la rutina para enviar.");
+        return;
     }
+
+    const data = {
+        rutinaNombre: "prueba1",  
+        usuario_id: 1,           
+        productos: arrayprod
+    };
+
+    console.log("datos enviados:", JSON.stringify(data));  // Verifica que arrayprod contenga los productos
+
+    fetch('../database/crearrutina.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',  
+        },
+        body: JSON.stringify(data)  
+    })    
+    .then(response => response.json())  // Convierte la respuesta a JSON
+    .then(result => {
+        console.log('Respuesta del servidor:', result);  // Ver qué está devolviendo el servidor
+
+        if (result.success) {
+            $('.fixed-routine').hide(); 
+            $('.fixed-routine').empty();
+            location.reload();  // Recarga la página actual
+
+            arrayprod = [];  
+            alert("Rutina creada exitosamente.");
+        } else {
+            alert('Hubo un error al crear la rutina.');
+        }
+    })
+    .catch(error => {
+        console.log('Error:', error);
+        alert('Hubo un problema con la solicitud.');
+    });
 }
+
+$(document).ready(function(){
+    
+    $(".contenedor-formularios").find("input, textarea").on("keyup blur focus", function (e) {
+
+        var $this = $(this),
+          label = $this.prev("label");
+
+        if (e.type === "keyup") {
+            if ($this.val() === "") {
+                label.removeClass("active highlight");
+            } else {
+                label.addClass("active highlight");
+            }
+        } else if (e.type === "blur") {
+            if($this.val() === "") {
+                label.removeClass("active highlight"); 
+                } else {
+                label.removeClass("highlight");   
+                }   
+        } else if (e.type === "focus") {
+            if($this.val() === "") {
+                label.removeClass("highlight"); 
+            } 
+            else if($this.val() !== "") {
+                label.addClass("highlight");
+            }
+        }
+
+    });
+
+    $(".tab a").on("click", function (e) {
+
+        e.preventDefault();
+
+        $(this).parent().addClass("active");
+        $(this).parent().siblings().removeClass("active");
+
+        target = $(this).attr("href");
+
+        $(".contenido-tab > div").not(target).hide();
+
+        $(target).fadeIn(600);
+
+    });
+    
+});
+
+
+
+
+
+
+
 // $(document).ready(function() {
 //     // Cuando se hace clic en el botón
 //     $('#actualizarImagenBtn').click(function() {
