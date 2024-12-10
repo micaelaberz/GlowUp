@@ -14,6 +14,12 @@ window.onclick = function (event) {
     }
 }
 
+$(document).ready(function() {
+    $('#salir').click(function() {
+        location.href = "../database/logout.php";
+    });
+});
+
 
 //funcion para seleccionar cantidad de pasos
 $(document).ready(function () {
@@ -22,7 +28,6 @@ $(document).ready(function () {
 
         var selectedSteps = $('#steps').val();
 
-        // console.log("Pasos seleccionados: ", selectedSteps); 
 
         $.ajax({
             url: '../database/getthatstep.php',
@@ -31,6 +36,8 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (data) {
                 console.log(data);
+                $("#contenedor").empty();  // Vacía el contenido del contenedor
+                $("#contenedor").hide();   // Oculta el contenedor
 
                 if (data && data.length > 0) {
                     $('.nav-list').empty();
@@ -51,6 +58,7 @@ $(document).ready(function () {
                     console.log('No se encontraron pasos');
                 }
                 $('#myModal').hide();
+
             },
             error: function (xhr, status, error) {
                 console.log('Error al obtener los pasos:', error);
@@ -72,8 +80,7 @@ $(document).on('click', '.step-btn', function () {
         data: { paso_id: pasoId },
         success: function (response) {
             var productos = JSON.parse(response);
-            $('#contenedor').empty();
-            $('#contenedor').addClass('contpro');
+            $('#productos').empty();
 
 
             productos.forEach(function (producto) {
@@ -125,7 +132,7 @@ $(document).on('click', '.step-btn', function () {
                 productoDiv.appendChild(nombreDiv);
                 productoDiv.appendChild(descripcionDiv);
 
-                $('#contenedor').append(productoDiv);
+                $('#productos').append(productoDiv);
             });
         },
         error: function () {
@@ -157,7 +164,7 @@ $(document).on('click', '.producto-item', function () {
                 contador++;
             }
         });
-        alert("Contador para el paso " + idpaso + ": " + contador);
+       // alert("Contador para el paso " + idpaso + ": " + contador);
 
         if (contador >= 2) {
             alert("Se recomienda usar solo 2 productos por paso.");
@@ -228,11 +235,12 @@ function actualizarContadorProductos() {
     var contadorProductos = arrayprod.length;
     $('#contador-productos').text(contadorProductos); // Actualiza el número en el HTML
 }
-$(document).on('click', '.confirmar-btn', function () {
+$(document).on('click', '#confirmar-btn', function () {
     crearrutina();  
 });
 //mandar rutina al php
 function crearrutina() {
+
     if (arrayprod.length === 0) {
         alert("No hay productos en la rutina para enviar.");
         return;
@@ -240,7 +248,7 @@ function crearrutina() {
 
     const data = {
         rutinaNombre: "prueba1",  
-        usuario_id: 1,           
+        usuario_id: usuario_id,  
         productos: arrayprod
     };
 

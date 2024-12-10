@@ -1,0 +1,123 @@
+
+body{
+    background-image: url('horizontal-banner-cosmetic-product-with-jade-roller-gua-sha.jpg');
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
+    background-attachment: fixed; 
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start; 
+    align-items: center; 
+    flex-direction: column;
+
+}
+
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#form-container{
+    width: 30%;
+    padding: 20px;
+    background-color: rgba(162, 225, 196, 0.3);
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+#titulo{
+    font-size: 70px;
+    text-align: center;
+    font-family: 'Pacifico', cursive;
+    color: #e1feef;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    
+    }
+    
+/* Estilo para los inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="password"]:focus,
+input[type="text"]:focus,
+input[type="email"]:focus {
+    border-color: #0056b3;
+    outline: none;
+}
+
+/* Estilo para el checkbox "Mostrar contraseña" */
+#showPassword {
+    width: auto;
+    margin-top: 10px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+/* Estilo para el botón de submit */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo cuando el botón de registro está deshabilitado */
+#register-submit:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Estilo para los formularios ocultos */
+#register-form {
+    display: none;
+}
+
+/* Estilo para el pie de formulario */
+.form-footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.switch-form {
+    font-size: 16px;
+}
+
+.switch-form a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.switch-form a:hover {
+    text-decoration: underline;
+}

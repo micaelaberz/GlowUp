@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingreso / Registro</title>
+    <link rel="stylesheet" type="text/css" href="login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+
+</head>
+<body>
+        <h1 id="titulo">Glow up</h1>
+
+    <div  id="form-container">
+        <form action="../database/login.php" method="POST" id="login-form">
+            <h2 id="form-title">Ingreso</h2>
+            <input type="text" placeholder="Usuario" name="username" required id="login-username">
+            <input type="password" placeholder="Contraseña" name="password" required id="login-password">
+            <button type="submit">Ingresar</button>
+        </form>
+        
+        <form action="../database/login.php" method="POST" id="register-form" style="display: none;">
+            <h2 id="form-title">Registro</h2>
+            <input type="text" placeholder="Nombre Completo" name="fullName" id="register-name" required>
+            <input type="email" placeholder="Correo Electrónico" name="email" id="register-email" required>
+            <input type="password" placeholder="Contraseña" name="password" id="register-password" oninput="validatePassword()">
+            <input type="password" placeholder="Confirmar Contraseña" name="confirmPassword" id="register-confirm-password" oninput="validatePassword()">
+            <small id="password-match-message" style="color: red; display: none;">Las contraseñas no coinciden</small>
+            <button type="submit" id="register-submit" disabled>Registrar</button>
+        </form>
+        
+        <div class="form-footer">
+            <div class="switch-form">
+                <span id="switch-text">¿No tienes cuenta? <a href="javascript:void(0)" onclick="switchForm('register')">Regístrate aquí</a></span>
+            </div>
+        </div>
+        
+    </div>
+  <script src="login.js"></script>
+</body>
+</html>
