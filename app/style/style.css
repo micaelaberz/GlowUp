@@ -62,7 +62,7 @@ h1 {
 }
 
 #fondo {
-    background-image: url('img/minimalistic-science-banner-with-sample.jpg');
+    background-image: url('../img/minimalistic-science-banner-with-sample.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -202,7 +202,11 @@ h2 {
 }
 
 
-
+.producto-imagen{
+    margin: 0;
+    width: 100px;
+    height: 100px;
+}
 .producto-item {
     border: 1px solid #ddd;
     padding: 10px;
@@ -219,12 +223,6 @@ h2 {
 
 .producto-nombre {
     background-color: rgba(0, 0, 0, 0.5);
-    /* color: white;
-    padding: 5px;
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    text-align: center; */
 }
 
 .producto-descripcion {
