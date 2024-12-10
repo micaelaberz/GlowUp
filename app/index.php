@@ -99,7 +99,7 @@ $user_id = $_SESSION['user_id'];
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>var usuario_id = <?php echo $_SESSION['user_id']; ?>;</script>
-  <script src="func.js"></script>
+  <script src="js/func.js"></script>
 
 
 

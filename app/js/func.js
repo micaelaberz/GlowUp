@@ -96,26 +96,22 @@ $(document).on('click', '.step-btn', function () {
 
                 var imagenDiv = document.createElement("div");
                 imagenDiv.classList.add("producto-imagen")
+                var imagen = document.createElement("img");
 
                 if (producto.foto) {
-                    var imagen = document.createElement("img");
-                    imagen.src = producto.foto; // Usa la URL o Base64 como fuente
+                    imagen.src = producto.foto; 
                     imagen.alt = producto.nombre_producto || "Producto sin nombre";
-                    imagenDiv.appendChild(imagen); // Agrega la imagen al div
                 }
                 else if (producto.imagen_base64) {
-                    var imagen = document.createElement("img");
-                    imagen.src = producto.imagen_base64;
-                    imagenDiv.appendChild(imagen); // Agrega la imagen al div
+                                        imagen.src = producto.imagen_base64;
 
                 }
                 else {
-                    var imagenPorDefecto = document.createElement("img");
-                    imagenPorDefecto.src = "minimalistic-science-banner-with-sample.jpg"; // URL de la imagen por defecto
+                    imagen.src = "minimalistic-science-banner-with-sample.jpg"; // URL de la imagen por defecto
                     imagenPorDefecto.alt = "Imagen no disponible";
-                    imagenDiv.appendChild(imagenPorDefecto); // Agrega la imagen por defecto al div
                 }
 
+                imagenDiv.appendChild(imagen); // Agrega la imagen al div
 
                 var nombreDiv = document.createElement("div");
                 nombreDiv.classList.add("producto-nombre");
@@ -281,53 +277,6 @@ function crearrutina() {
         alert('Hubo un problema con la solicitud.');
     });
 }
-
-$(document).ready(function(){
-    
-    $(".contenedor-formularios").find("input, textarea").on("keyup blur focus", function (e) {
-
-        var $this = $(this),
-          label = $this.prev("label");
-
-        if (e.type === "keyup") {
-            if ($this.val() === "") {
-                label.removeClass("active highlight");
-            } else {
-                label.addClass("active highlight");
-            }
-        } else if (e.type === "blur") {
-            if($this.val() === "") {
-                label.removeClass("active highlight"); 
-                } else {
-                label.removeClass("highlight");   
-                }   
-        } else if (e.type === "focus") {
-            if($this.val() === "") {
-                label.removeClass("highlight"); 
-            } 
-            else if($this.val() !== "") {
-                label.addClass("highlight");
-            }
-        }
-
-    });
-
-    $(".tab a").on("click", function (e) {
-
-        e.preventDefault();
-
-        $(this).parent().addClass("active");
-        $(this).parent().siblings().removeClass("active");
-
-        target = $(this).attr("href");
-
-        $(".contenido-tab > div").not(target).hide();
-
-        $(target).fadeIn(600);
-
-    });
-    
-});
 
 
 
