@@ -80,7 +80,6 @@ h1 {
 }
 
 #productos {
-    width: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -142,7 +141,62 @@ h1 {
 .textorutina {
     font-size: 1.7em;
 }
-
+.titulorut{
+    color: whitesmoke;
+}
+.modalrut{
+    background-color: #444;
+    color: white;    
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 70%;
+    text-align: center;
+    font-family: 'Parkinsans', sans-serif;
+}
+#listadorutinas{
+    padding: 0;
+    margin: auto;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 1.2em;
+    justify-content: space-around;
+    color: black;
+}
+.modal-header {
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    position: relative;  
+    padding: 10px;
+    border-bottom: 1px solid #ccc;  
+  }
+  
+  .modal-header h3 {
+    flex-grow: 1; 
+    text-align: center;  
+    font-size: 24px;  
+    margin: 0; 
+  }
+  
+  .modal-header .close-btn {
+    position: absolute;  
+    right: 10px;
+    font-size: 60px;  
+    color: #8fecbc;  
+    cursor: pointer;
+  }
+  
+  .agregado{
+margin: 5px;
+  }
+  .modal-header .close-btn:hover {
+    color: #000; 
+    cursor: pointer;
+  }
 .enviar:hover,
 .confirmar:hover,
 #guardarRutinaBtn:hover{
@@ -220,14 +274,14 @@ h2 {
 
 
 .producto-imagen {
-    margin: 0;
+    margin:auto;
+    max-height: 100%;
+    max-width: 100%;
 }
 
 .producto-item {
-    border: 1px solid #ddd;
     padding: 10px;
-    margin: 10px;
-    width: 200px;
+    width: 10%;
     height: 250px;
     position: relative;
     display: flex;
@@ -238,12 +292,15 @@ h2 {
 
 
 .producto-nombre {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.2);
+    font-size: 1.1em;
+    text-align: center;
 }
 
 .producto-descripcion {
-    margin: auto;
     color: #333;
+    text-align: center;
+    margin: auto;
 }
 
 
@@ -271,8 +328,7 @@ h2 {
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 50%;
-    max-width: 600px;
+    width: 45%;
     text-align: center;
     font-family: 'Parkinsans', sans-serif;
 }
@@ -419,10 +475,15 @@ input[type="submit"]:hover {
 
 #listado {
     overflow-y: auto;
-    scrollbar-color: #91d7b3 #444; /* Color del thumb y del track */
+    scrollbar-color: #91d7b3 #444; 
     margin-bottom: 10px;
 }
+.scrolrut{
+    scrollbar-color: #91d7b3 #444; 
+    border-radius: 4px; /* Bordes redondeados */
 
+
+}
 /* Para navegadores basados en WebKit */
 #listado::-webkit-scrollbar {
     width: 30px; /* Ancho de la barra */

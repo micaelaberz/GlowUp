@@ -1,21 +1,11 @@
 <?php
 session_start();
 if (isset($_SESSION['user_id'])) {
-  // El usuario está dentro de la sesión
-  echo "Bienvenido, usuario con ID: " . $_SESSION['user_id'];
+    $user_id = $_SESSION['user_id'];
 } else {
-  // El usuario no está autenticado
-  echo "No estás autenticado.";
+    header(header: "Location: login.html");
+    exit();  
 }
-// // Verifica si el ID de sesión está establecido
-// if (!isset($_SESSION['user_id'])) {
-//   header("Location:login.html"); // Redirige al login si no hay sesión
-//   exit();
-// }
-// $user_id = $_SESSION['user_id'];
-
-
-
 ?>
 
 
@@ -106,18 +96,19 @@ if (isset($_SESSION['user_id'])) {
     </div>
   </div>
 
+  <div id="rutinaModal" class="modal scrolrut">
+  <div class="modalrut">
+  <div class="modal-header">
+  <span class="close-btn" onclick="closeModal()">×</span>
+  <h3 id="text">Mis rutinas</h3>
+</div>
+    <div>
+      <ul id="listadorutinas">
 
-
-
-
-
-
-
-
-
-
-
-
+      </ul> 
+    </div>
+  </div>
+</div>
 
   <div class="fixed-routine" style="display: none;">
     <div id="panel">
@@ -129,9 +120,10 @@ if (isset($_SESSION['user_id'])) {
 
     <div id="listado">
       <ul id="routine-list">
-
       </ul>
     </div>
+
+
   </div>
 
 

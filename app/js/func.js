@@ -247,29 +247,29 @@ $(document).on('click', '#traerrutina', function () {
     
     
     
-    // traer rutinas del usuario
 // Función para traer las rutinas del usuario
 function traerrutina() {
-    const usuarioId = usuario_id; // Asegúrate de tener el ID del usuario disponible aquí
-    
+    const usuarioId = usuario_id;
+
     fetch('../../database/getrutine.php', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json', 
         },
-        body: JSON.stringify({ usuario_id: usuarioId }) // Pasar el ID del usuario en el cuerpo de la solicitud
+        body: JSON.stringify({ usuario_id: usuarioId }) 
     })
     .then(response => response.json())
     .then(data => {
         console.log("Rutinas obtenidas:", data);
+        openModal();
         
         if (data.error) {
-            alert(data.error);  // Si hay un error, mostrarlo
+            alert(data.error);
         } else if (data.message) {
-            alert(data.message);  // Si no hay rutinas, mostrar mensaje
+            alert(data.message);
         } else {
-            // Si se obtuvieron rutinas, mostrarlas
-            mostrarRutinas(data);
+            mostrarRutinas(data); 
+ 
         }
     })
     .catch(error => {
@@ -280,45 +280,134 @@ function traerrutina() {
 
 
 // Función para mostrar las rutinas en la interfaz
-function mostrarRutinas(rutinas) {
-    const contenedorRutinas = document.getElementById('productos');  // Un contenedor en tu HTML donde mostrarás las rutinas
-    contenedorRutinas.innerHTML = '';  // Limpiar el contenido anterior
-    $("#contenedor").empty();  // Vacía el contenido del contenedor
-    $("#contenedor").hide();   // Oculta el contenedor
+function openModal() {
+    document.getElementById("rutinaModal").style.display = "block";
+  }
+
+  function closeModal() {
+    document.getElementById("rutinaModal").style.display = "none";
+  }
+  
 
 
-    // Iterar sobre las rutinas y crear elementos HTML para cada una
-    for (let idRutina in rutinas) {
-        const rutina = rutinas[idRutina];
+
+
+
+
+
+
+  function mostrarRutinas(data) {
+    const routineList = document.getElementById("listadorutinas");
+    routineList.innerHTML = '';  // Limpiar lista antes de agregar nuevos datos
+    openModal();
+
+    // Recorrer las rutinas y mostrar los productos y pasos
+    for (const id_rutina in data) {
+      const rutina = data[id_rutina];
+
+        if (!rutina.productos || rutina.productos.length === 0) {
+            console.log(`La rutina ${rutina.nombreRutina} está vacía y no se mostrará.`);
+        continue; // Si no tiene productos, saltar al siguiente ciclo
+      }
+      
+      const rutinaElement = document.createElement("div");
+      rutinaElement.classList.add("rutina-item");
+  
+      const rutinaTitle = document.createElement("h3");
+      rutinaTitle.textContent = rutina.nombreRutina;
+      rutinaElement.appendChild(rutinaTitle);
+      rutinaTitle.classList.add("textorutina");
+      rutinaTitle.classList.add("titulorut");
+
+      console.log("Rutina completa:", rutina);
+      let productosValidos = false; // Variable para verificar si al menos un producto es válido
+
+
+      rutina.productos.forEach((producto, index) => {
+
+        if (producto.id_producto === null || producto.id_producto === "null") {
+            console.log("Producto sin id válido, se omite:", producto);
+            return; // Saltar este producto si el idproducto es 'null'
+        }
+
+        productosValidos = true;
+
+
+
+        const productoRow = document.createElement("div");
+        productoRow.classList.add("producto-row");
+        productoRow.classList.add("agregado");
+        productoRow.setAttribute("idproducto",producto.id_producto);
+        productoRow.setAttribute("idrutina",rutina.id_rutina);
+
+
+        const productoNombreCell = document.createElement("div");
+        productoNombreCell.classList.add("producto-nombre-cell");
+        productoNombreCell.textContent = producto.nombre_producto;
         
-        const rutinaDiv = document.createElement('div');
-        rutinaDiv.classList.add('rutina');
-        
-        const nombreRutina = document.createElement('h4');
-        nombreRutina.textContent = rutina.nombre_rutina;
-        rutinaDiv.appendChild(nombreRutina);
-        
-        const productosList = document.createElement('ul');
-        rutina.productos.forEach(producto => {
-            const productoItem = document.createElement('li');
-            productoItem.textContent = producto;
-            productosList.appendChild(productoItem);
-        });
-        rutinaDiv.appendChild(productosList);
-        
-        const pasosList = document.createElement('ul');
-        rutina.pasos.forEach(paso => {
-            const pasoItem = document.createElement('li');
-            pasoItem.textContent = paso;
-            pasosList.appendChild(pasoItem);
-        });
-        rutinaDiv.appendChild(pasosList);
-        
-        contenedorRutinas.appendChild(rutinaDiv);  // Añadir la rutina al contenedor
+        const productoPasoCell = document.createElement("div");
+        productoPasoCell.classList.add("producto-paso-cell");
+        productoPasoCell.textContent = rutina.pasos[index];  // Asignar paso correspondiente
+  
+        const eliminarBtn = document.createElement("button");
+        eliminarBtn.classList.add("eliminar");
+        eliminarBtn.textContent = "Eliminar";
+        eliminarBtn.onclick = () => eliminarRutina(rutina.id_rutina, producto.id_producto); // Función para eliminar
+  
+        productoRow.appendChild(productoNombreCell);
+        productoRow.appendChild(productoPasoCell);
+        productoRow.appendChild(eliminarBtn);
+  
+        rutinaElement.appendChild(productoRow);
+      });
+      if (productosValidos) {
+        routineList.appendChild(rutinaElement);
+    } else {
+        console.log(`La rutina ${rutina.nombreRutina} no tiene productos válidos y no se mostrará.`);
     }
+  }
 }
 
 
+  function eliminarRutina(id_rutina, id_producto) {
+    console.log(`Eliminando producto con ID: ${id_producto} de la rutina con ID: ${id_rutina}`);
+    
+    // Enviar una solicitud al servidor
+    fetch('../../database/deleteProductFromRoutine.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id_rutina: id_rutina, id_producto: id_producto })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+
+            const productoElement = document.querySelector(`.producto-row[idproducto="${id_producto}"]`);
+
+      if (productoElement) {
+        productoElement.remove();   
+        console.log("Producto eliminado correctamente de la interfaz");
+           
+        const rutinaElement = productoElement.closest('.rutina-item');
+        const productosRestantes = rutinaElement.querySelectorAll('.producto-row');
+
+        // Si no quedan más productos, eliminar la rutina completa
+        if (productosRestantes.length === 0) {
+            rutinaElement.remove();
+            console.log("Rutina eliminada porque es la última en la lista.");
+
+    } }
+        } else {
+            console.error("Error al eliminar el producto:", data.error);
+            alert(data.error || "No se pudo eliminar el producto.");
+        }
+    })
+    .catch(error => {
+        console.error("Error al procesar la eliminación:", error);
+    });
+}
 
 //mandar rutina al php
 function crearrutina() {
@@ -377,54 +466,6 @@ function crearrutina() {
 
 
 
-// $(document).ready(function() {
-//     // Cuando se hace clic en el botón
-//     $('#actualizarImagenBtn').click(function() {
-//         // Enviar la solicitud AJAX al archivo PHP
-//         $.ajax({
-//             url: 'actualizar_imagen.php',  // El archivo PHP que maneja la actualización
-//             type: 'POST',  // Método de la solicitud
-//             data: { 
-//                 producto_id: 3  // El ID del producto que quieres actualizar (en este caso, ID 3)
-//             },
-//             success: function(response) {
-//                 // Mostrar el mensaje de éxito o error
-//                 $('#mensaje').html(response);
-//             },
-//             error: function() {
-//                 $('#mensaje').html('Hubo un error al actualizar la imagen.');
-//             }
-//         });
-//     });
-// });
-// $(document).ready(function() {
-//     $('#actualizarImagenBtn').click(function() {
-//         // Realizar la solicitud fetch a 'verimagen.php'
-//         fetch('../database/verimagen.php?id=1') // Cambia la ruta si es necesario
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error('Error en la solicitud: ' + response.statusText);
-//             }
-//             return response.blob();  // Esperamos un Blob (un tipo de objeto binario)
-//         })
-//         .then(blob => {
-//             // Crear un objeto URL para la imagen y mostrarla
-//             const img = document.createElement('img');
-//             img.src = URL.createObjectURL(blob);  // Crea una URL para el Blob de la imagen
-//             img.alt = 'Imagen producto';
-//             img.style.width = '100px';  // Ajusta el tamaño si es necesario
-//             img.style.margin = '10px';
-
-//             // Agregar la imagen al contenedor
-//             const contenedor = document.getElementById('contenedor');
-//             contenedor.innerHTML = '';  // Limpiar el contenedor
-//             contenedor.appendChild(img);
-//         })
-//         .catch(error => {
-//             console.error('Error al obtener la imagen:', error);
-//         });
-//     });
-// });
 
 // estilo para q se vean los numeros en la barra
 function updateStepsValue(value) {
@@ -432,7 +473,7 @@ function updateStepsValue(value) {
 }
 
 
-// //borrar para abajo
+ //para abajo
 // document.getElementById('uploadForm').addEventListener('submit', function(event) {
 //     event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
 
