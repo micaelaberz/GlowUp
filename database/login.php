@@ -1,93 +1,74 @@
 <?php
 session_start();
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+// Redirigir si ya hay una sesión activa
 if (isset($_SESSION['usuario'])) {
-    header("Location: index.php"); //si ya hay sesion se va 
+    header("Location: ../../index.php"); // Si ya hay sesión activa, redirige a la página principal
     exit();
 }
 
-require "database.php"; 
+require 'database.php'; // Asegúrate de que la conexión a la base de datos esté configurada correctamente
 
-
-// Verifica si la solicitud es POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-    // Verifica si es un intento de inicio de sesión
-    if (isset($_POST['username'], $_POST['password'])) {
-        $username = trim($_POST['username']);
+
+    // Proceso de login
+    if (isset($_POST['username']) && isset($_POST['password'])) {
+        $username = $_POST['username'];
         $password = $_POST['password'];
 
-        try {
-            // Busca al usuario en la base de datos usando PDO
-            $sql = "SELECT id_usuario, contrasena FROM usuarios WHERE nombre_usuario = :username";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':username', $username);
-            $stmt->execute();
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Verificar que el usuario exista en la base de datos
+        $stmt = $pdo->prepare('SELECT * FROM usuarios WHERE nombre_usuario = :username');
+        $stmt->execute(['username' => $username]);
+        $user = $stmt->fetch();
 
-            if ($user && password_verify($password, $user['contrasena'])) {
-                // Credenciales válidas, inicia sesión
-                $_SESSION['user_id'] = $user['id_usuario'];
-                $_SESSION['username'] = $username;
-                session_start(); 
-
-                // Redirige al usuario a la página principal
-                header("Location: ../app/index.php");
-                exit;
-            }
-            else{
-                header("Location: ../app/login.html");
-            }
-        } catch (PDOException $e) {
-            echo "Error al iniciar sesión: " . $e->getMessage();
+        if ($user && password_verify($password, $user['contrasena'])) { // Verificar la contraseña encriptada
+            $_SESSION['user_id'] = $user['id_usuario'];
+            $_SESSION['username'] = $username;
+            echo json_encode(['success' => true, 'message' => 'Login exitoso']);
+        } else {
+            // Si las credenciales son incorrectas
+            echo json_encode(['success' => false, 'message' => 'Credenciales incorrectas']);
         }
+    }
 
-    // Verifica si es un intento de registro
-    } elseif (isset($_POST['fullName'], $_POST['email'], $_POST['password'], $_POST['confirmPassword'])) {
-        $fullName = trim($_POST['fullName']);
-        $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
+    // Proceso de registro
+    elseif (isset($_POST['fullName']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirmPassword'])) {
+        $username = $_POST['fullName'];
+        $email = $_POST['email'];
         $password = $_POST['password'];
         $confirmPassword = $_POST['confirmPassword'];
 
-
-
-        // Hashea la contraseña
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-        try {
-            // Verifica si el nombre de usuario o el correo ya están registrados
-            $sql = "SELECT id_usuario FROM usuarios WHERE nombre_usuario = :nombre_usuario OR email = :email";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':nombre_usuario', $fullName);
-            $stmt->bindParam(':email', $email);
-            $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                echo json_encode(['success' => false, 'message' => 'El usuario ya esta en uso']);
-            } else {
-                // Inserta el usuario en la base de datos
-                $sql = "INSERT INTO usuarios (nombre_usuario, email, contrasena) VALUES (:nombre_usuario, :email, :contrasena)";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(':nombre_usuario', $fullName);
-                $stmt->bindParam(':email', $email);
-                $stmt->bindParam(':contrasena', $hashedPassword);
-                $stmt->execute();
-                header("Location: ../app/login.html");
-            }
-
-        } catch (PDOException $e) {
-            echo "Error al registrar el usuario: " . $e->getMessage();
+        // Validación de contraseñas coincidentes
+        if ($password !== $confirmPassword) {
+            echo json_encode(['success' => false, 'message' => 'Las contraseñas no coinciden']);
+            exit;
         }
-    } else {
-        echo "Solicitud no válida.";
-    }
 
-} else {
-    echo "Método de solicitud no permitido.";
+        // Verificar si el correo ya está registrado
+        $stmt = $pdo->prepare('SELECT * FROM usuarios WHERE email = :email');
+        $stmt->execute(['email' => $email]);
+        $existingUser = $stmt->fetch();
+
+        if ($existingUser) {
+            echo json_encode(['success' => false, 'message' => 'El correo ya está registrado']);
+            exit;
+        }
+
+        // Encriptar la contraseña antes de almacenarla
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        // Insertar usuario en la base de datos
+        $stmt = $pdo->prepare('INSERT INTO usuarios (nombre_usuario, email, contrasena) VALUES (:username, :email, :password)');
+        $success = $stmt->execute(['username' => $username, 'email' => $email, 'password' => $hashedPassword]);
+
+        if ($success) {
+            $userId = $pdo->lastInsertId(); 
+
+            $_SESSION['user_id'] = $userId;
+            $_SESSION['username'] = $username;
+            echo json_encode(['success' => true, 'message' => 'Registro exitoso']);
+        } 
+    }
 }
 ?>
-
-    
-    
-    
-    
-    

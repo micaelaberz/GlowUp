@@ -39,26 +39,33 @@ h1 {
     margin-bottom: 20px;
 }
 
-#salir {
+#salir,
+#atras {
     background-color: #8bbaa2;
+    margin: 15px;
     color: white;
     border-radius: 5px;
-    height: 5%;
-    width: 10%;
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 20px;
+    height: 40px;
+    width: 200px;
     font-size: 24px;
     border: 0;
 }
 
-#salir:hover {
+#salir:hover,
+#atras:hover {
     cursor: pointer;
     transition: background-color 0.5s ease, transform 0.6s ease;
     background-color: #d3ffec;
     color: #121e18;
     transform: scale(1.1);
+}
+
+#botones {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 #fondo {
@@ -71,13 +78,15 @@ h1 {
     flex-direction: column;
     align-items: center;
 }
-#productos{
+
+#productos {
     width: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 
 }
+
 #contenedor {
     width: 60%;
     margin: auto;
@@ -85,38 +94,42 @@ h1 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 5%; 
+    margin-top: 5%;
 }
+
 #bien {
     color: white;
     margin: 0;
-    font-size: 3em;    
+    font-size: 3em;
     letter-spacing: 5px;
     font-family: 'Bebas Neue', sans-serif;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
-.texto {    
+
+.texto {
     font-size: 1.7vw;
     color: white;
     font-family: 'Parkinsans', sans-serif;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    text-align: center; 
+    text-align: center;
     margin: 10px;
 
 }
+
 .enviar {
     background-color: #8fecbc;
     color: #1b2c23;
     border-radius: 20px;
-    height:70px;
+    height: 70px;
     width: 35%;
     font-size: 2em;
+    margin: 20px;
     border: 0;
     font-family: 'Parkinsans', sans-serif;
 
 }
 
-.confirmar{
+.confirmar {
     background-color: #8fecbc;
     color: #1b2c23;
     border-radius: 5px;
@@ -126,16 +139,20 @@ h1 {
 }
 
 
-.textorutina{
+.textorutina {
     font-size: 1.7em;
 }
-.enviar:hover, .confirmar:hover{
+
+.enviar:hover,
+.confirmar:hover,
+#guardarRutinaBtn:hover{
     cursor: pointer;
     transition: background-color 0.5s ease, transform 0.6s ease;
     background-color: #91d7b3;
     color: #121e18;
     transform: scale(1.1);
 }
+
 .elem {
     background-color: white;
     border: groove;
@@ -202,11 +219,10 @@ h2 {
 }
 
 
-.producto-imagen{
+.producto-imagen {
     margin: 0;
-    width: 100px;
-    height: 100px;
 }
+
 .producto-item {
     border: 1px solid #ddd;
     padding: 10px;
@@ -301,6 +317,26 @@ label {
     font-size: 30px;
 }
 
+#nombre-rutina{
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    font-size: 1.3em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+
+}
+#guardarRutinaBtn{
+    background-color: #8fecbc;
+    color: #1b2c23;
+    border-radius: 20px;
+    height: 50px;
+    width: 35%;
+    font-size: 1.3em;
+    border: 0;
+    font-family: 'Parkinsans', sans-serif;
+}
 
 input[type="submit"] {
     background-color: #8fecbc;
@@ -373,44 +409,70 @@ input[type="submit"]:hover {
     width: 100%;
     background-color: #444;
     color: white;
-    padding: 20px 10px;
+    box-sizing: border-box;
     box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.3);
     text-align: left;
-    overflow-y: auto;
-    max-height: 200px;
+    max-height: 250px;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Estilo para la lista de rutina */
+#listado {
+    overflow-y: auto;
+    scrollbar-color: #91d7b3 #444; /* Color del thumb y del track */
+    margin-bottom: 10px;
+}
+
+/* Para navegadores basados en WebKit */
+#listado::-webkit-scrollbar {
+    width: 30px; /* Ancho de la barra */
+    background-color: #444; /* Color del track (fondo) */
+}
+
+#listado::-webkit-scrollbar-thumb {
+    background-color: #888; /* Color del thumb (barra) */
+    border-radius: 4px; /* Bordes redondeados */
+}
+
+#listado::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Color del thumb al pasar el mouse */
+}
+
+#listado::-webkit-scrollbar-track {
+    background-color: #333; /* Color del track (fondo de la barra) */
+}   
+
 #routine-list {
     padding: 0;
     margin: 0;
-    width: 60%;
+    width: 90%;
     display: flex;
     flex-direction: column;
     gap: 10px;
-font-size: 1.2em;
+    font-size: 1.2em;
     justify-content: space-around;
     color: black;
 }
 
 .producto-row {
-    display: flex;          
-    justify-content: space-between;  
-    align-items: center;   
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     border-radius: 10px;
-    padding: 10px 0;       
+    padding: 10px 0;
     color: whitesmoke;
     background-color: rgba(119, 255, 192, 0.3);
 }
 
-.producto-nombre-cell, .producto-paso-cell {
-    flex: 1;               
-    padding: 0 10px;       
-    text-align: left;       
+.producto-nombre-cell,
+.producto-paso-cell {
+    flex: 1;
+    padding: 0 10px;
+    text-align: left;
 }
 
 .eliminar {
-    margin-right: 10px;     
+    margin-right: 10px;
     background-color: #8fecbc;
     color: #1b2c23;
     border-radius: 5px;
@@ -420,7 +482,7 @@ font-size: 1.2em;
 
 }
 
-#panel{
+#panel {
     display: flex;
     flex-direction: row;
     justify-content: space-around;

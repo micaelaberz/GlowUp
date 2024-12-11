@@ -1,12 +1,19 @@
 <?php
-session_start(); 
-
-// Verifica si el ID de sesión está establecido
-if (!isset($_SESSION['user_id'])) {
-    header("Location:login.html"); // Redirige al login si no hay sesión
-    exit();
+session_start();
+if (isset($_SESSION['user_id'])) {
+  // El usuario está dentro de la sesión
+  echo "Bienvenido, usuario con ID: " . $_SESSION['user_id'];
+} else {
+  // El usuario no está autenticado
+  echo "No estás autenticado.";
 }
-$user_id = $_SESSION['user_id'];
+// // Verifica si el ID de sesión está establecido
+// if (!isset($_SESSION['user_id'])) {
+//   header("Location:login.html"); // Redirige al login si no hay sesión
+//   exit();
+// }
+// $user_id = $_SESSION['user_id'];
+
 
 
 ?>
@@ -35,7 +42,10 @@ $user_id = $_SESSION['user_id'];
 <body>
   <header>
     <h1 id="titulo">Glow up</h1>
-    <button id="salir">Salir</button>
+    <div id="botones">
+      <button id="salir">Salir</button>
+      <button id="atras">Atrás</button>
+    </div>
   </header>
 
 
@@ -51,6 +61,9 @@ $user_id = $_SESSION['user_id'];
     </ul>
   </nav>
 
+
+
+
   <div id="fondo">
     <div id="productos"></div>
     <div id="contenedor">
@@ -58,6 +71,7 @@ $user_id = $_SESSION['user_id'];
       <p class="texto">Bienvenido a Glow Up! Sumérgete en el mundo de rutinas para el cuidado de la piel.</p>
       <p class="texto">Explore los mejores productos de limpieza, hidratación y sueros, adaptados a las necesidades únicas de su piel.</p>
       <button class="enviar" id="enviar">Empezar</button>
+      <button class="enviar" id="traerrutina">Ver mis rutinas</button>
 
       <div id="myModal" class="modal">
         <div class="modal-content">
@@ -75,13 +89,34 @@ $user_id = $_SESSION['user_id'];
 
 
             <input type="submit" value="Aceptar" id="enviarform">
-            
+
           </form>
         </div>
       </div>
     </div>
-
   </div>
+
+
+  <div id="nombreRutinaModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h3>Nombre de la Rutina</h3>
+      <input type="text" id="nombre-rutina" placeholder="Escribe el nombre de la rutina">
+      <button id="guardarRutinaBtn" >Guardar Rutina</button>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   <div class="fixed-routine" style="display: none;">
@@ -90,15 +125,21 @@ $user_id = $_SESSION['user_id'];
       <span class="textorutina">Productos seleccionados: <span id="contador-productos">0</span></span>
       <button class="confirmar" id="confirmar-btn">Confirmar Rutina</button>
     </div>
+
+
     <div id="listado">
-    <ul id="routine-list">
-    </ul>
+      <ul id="routine-list">
+
+      </ul>
+    </div>
   </div>
-  </div>
+
 
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>var usuario_id = <?php echo $_SESSION['user_id']; ?>;</script>
+  <script>
+    var usuario_id = <?php echo $_SESSION['user_id']; ?>;
+  </script>
   <script src="js/func.js"></script>
 
 
@@ -111,3 +152,6 @@ $user_id = $_SESSION['user_id'];
 </body>
 
 </html>
+
+
+

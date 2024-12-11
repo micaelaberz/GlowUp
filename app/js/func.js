@@ -20,45 +20,44 @@ $(document).ready(function() {
     });
 });
 
-
+$(document).ready(function() {
+    $('#atras').click(function() {
+    window.location.href = 'index.php'; // Cambia la URL al home
+});
+});
 //funcion para seleccionar cantidad de pasos
 $(document).ready(function () {
     $('#modalForm').submit(function (event) {
-        event.preventDefault();
+        event.preventDefault(); // Evita el comportamiento por defecto del formulario
 
-        var selectedSteps = $('#steps').val();
-
+        var selectedSteps = $('#steps').val(); // Obtiene el valor de los pasos seleccionados
 
         $.ajax({
-            url: '../database/getthatstep.php',
+            url: '../../database/getthatstep.php', // Ruta al archivo PHP
             type: 'GET',
             data: { steps: selectedSteps },
             dataType: 'json',
             success: function (data) {
-                console.log(data);
+                console.log(data); // Log para depuración
                 $("#contenedor").empty();  // Vacía el contenido del contenedor
                 $("#contenedor").hide();   // Oculta el contenedor
 
                 if (data && data.length > 0) {
-                    $('.nav-list').empty();
-                    var paso = 0;
-
+                    $('.nav-list').empty(); // Limpia la lista de navegación
 
                     data.forEach(function (step) {
-                        if (step.nombre_paso) {
-                            paso++; // Incrementa el paso
-
+                        // Verifica que el paso tenga nombre e ID
+                        if (step.nombre_paso && step.id_pasos) { 
                             var stepItem = $('<li></li>')
-                                .append('<button class="step-btn" data-step="' + paso + '">' + step.nombre_paso + '</button>');
+                                .append('<button class="step-btn" data-step="' + step.id_pasos + '">' + step.nombre_paso + '</button>');
 
-                            $('.nav-list').append(stepItem);
+                            $('.nav-list').append(stepItem); // Agrega el elemento a la lista
                         }
                     });
                 } else {
                     console.log('No se encontraron pasos');
                 }
-                $('#myModal').hide();
-
+                $('#myModal').hide(); // Oculta el modal
             },
             error: function (xhr, status, error) {
                 console.log('Error al obtener los pasos:', error);
@@ -75,7 +74,7 @@ $(document).on('click', '.step-btn', function () {
     //alert("el paso es"+pasoId);
 
     $.ajax({
-        url: '../database/getproduct.php',
+        url: '../../database/getproduct.php',
         method: 'GET',
         data: { paso_id: pasoId },
         success: function (response) {
@@ -103,12 +102,11 @@ $(document).on('click', '.step-btn', function () {
                     imagen.alt = producto.nombre_producto || "Producto sin nombre";
                 }
                 else if (producto.imagen_base64) {
-                                        imagen.src = producto.imagen_base64;
+                    imagen.src = producto.imagen_base64;
 
                 }
                 else {
                     imagen.src = "minimalistic-science-banner-with-sample.jpg"; // URL de la imagen por defecto
-                    imagenPorDefecto.alt = "Imagen no disponible";
                 }
 
                 imagenDiv.appendChild(imagen); // Agrega la imagen al div
@@ -231,9 +229,97 @@ function actualizarContadorProductos() {
     var contadorProductos = arrayprod.length;
     $('#contador-productos').text(contadorProductos); // Actualiza el número en el HTML
 }
+
 $(document).on('click', '#confirmar-btn', function () {
-    crearrutina();  
+    $('#nombreRutinaModal').show();
 });
+$(document).on('click', '.close', function () {
+    $('#nombreRutinaModal').hide();
+});
+$(document).on('click', '#guardarRutinaBtn', function () {
+crearrutina();
+});
+
+$(document).on('click', '#traerrutina', function () {
+    traerrutina();
+    });
+    
+    
+    
+    
+    // traer rutinas del usuario
+// Función para traer las rutinas del usuario
+function traerrutina() {
+    const usuarioId = usuario_id; // Asegúrate de tener el ID del usuario disponible aquí
+    
+    fetch('../../database/getrutine.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ usuario_id: usuarioId }) // Pasar el ID del usuario en el cuerpo de la solicitud
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Rutinas obtenidas:", data);
+        
+        if (data.error) {
+            alert(data.error);  // Si hay un error, mostrarlo
+        } else if (data.message) {
+            alert(data.message);  // Si no hay rutinas, mostrar mensaje
+        } else {
+            // Si se obtuvieron rutinas, mostrarlas
+            mostrarRutinas(data);
+        }
+    })
+    .catch(error => {
+        console.error("Error al obtener rutinas:", error);
+        alert("Hubo un problema al obtener las rutinas.");
+    });
+}
+
+
+// Función para mostrar las rutinas en la interfaz
+function mostrarRutinas(rutinas) {
+    const contenedorRutinas = document.getElementById('productos');  // Un contenedor en tu HTML donde mostrarás las rutinas
+    contenedorRutinas.innerHTML = '';  // Limpiar el contenido anterior
+    $("#contenedor").empty();  // Vacía el contenido del contenedor
+    $("#contenedor").hide();   // Oculta el contenedor
+
+
+    // Iterar sobre las rutinas y crear elementos HTML para cada una
+    for (let idRutina in rutinas) {
+        const rutina = rutinas[idRutina];
+        
+        const rutinaDiv = document.createElement('div');
+        rutinaDiv.classList.add('rutina');
+        
+        const nombreRutina = document.createElement('h4');
+        nombreRutina.textContent = rutina.nombre_rutina;
+        rutinaDiv.appendChild(nombreRutina);
+        
+        const productosList = document.createElement('ul');
+        rutina.productos.forEach(producto => {
+            const productoItem = document.createElement('li');
+            productoItem.textContent = producto;
+            productosList.appendChild(productoItem);
+        });
+        rutinaDiv.appendChild(productosList);
+        
+        const pasosList = document.createElement('ul');
+        rutina.pasos.forEach(paso => {
+            const pasoItem = document.createElement('li');
+            pasoItem.textContent = paso;
+            pasosList.appendChild(pasoItem);
+        });
+        rutinaDiv.appendChild(pasosList);
+        
+        contenedorRutinas.appendChild(rutinaDiv);  // Añadir la rutina al contenedor
+    }
+}
+
+
+
 //mandar rutina al php
 function crearrutina() {
 
@@ -242,15 +328,22 @@ function crearrutina() {
         return;
     }
 
+    const nombreRutina = $('#nombre-rutina').val().trim();
+
+    if (!nombreRutina) {
+        alert("Por favor, ingresa un nombre para la rutina.");
+        return;
+    }
+
     const data = {
-        rutinaNombre: "prueba1",  
+        rutinaNombre:nombreRutina,  
         usuario_id: usuario_id,  
         productos: arrayprod
     };
 
     console.log("datos enviados:", JSON.stringify(data));  // Verifica que arrayprod contenga los productos
 
-    fetch('../database/crearrutina.php', {
+    fetch('../../database/crearrutina.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',  
@@ -338,3 +431,38 @@ function updateStepsValue(value) {
     document.getElementById("stepValueDisplay").innerText = value;
 }
 
+
+// //borrar para abajo
+// document.getElementById('uploadForm').addEventListener('submit', function(event) {
+//     event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+
+//     var formData = new FormData(); // Crear un objeto FormData para manejar el archivo
+//     var productoId = document.getElementById('producto_id').value; // Obtener el ID del producto
+//     var fileInput = document.getElementById('imagen');
+//     var file = fileInput.files[0]; // Obtener el archivo seleccionado
+
+//     if (file && productoId) {
+//         formData.append('producto_id', productoId); // Agregar el ID del producto al FormData
+//         formData.append('imagen', file); // Agregar el archivo al FormData
+
+//         // Enviar la imagen al servidor con fetch
+//         fetch("../../database/subirimagen.php", {
+//             method: 'POST',
+//             body: formData,
+//         })
+//         .then(response => response.json()) // Suponemos que el servidor responderá con JSON
+//         .then(data => {
+//             if (data.success) {
+//                 document.getElementById('resultado').innerHTML = "¡Imagen subida con éxito!";
+//             } else {
+//                 document.getElementById('resultado').innerHTML = "Error al subir la imagen.";
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error al subir la imagen:', error);
+//             document.getElementById('resultado').innerHTML = "Hubo un error al procesar la imagen.";
+//         });
+//     } else {
+//         document.getElementById('resultado').innerHTML = "Por favor, selecciona una imagen y un ID de producto.";
+//     }
+// });

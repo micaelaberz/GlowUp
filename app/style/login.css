@@ -14,7 +14,6 @@ body{
 
 }
 
-
 form {
     max-width: 400px;
     margin: 0 auto;
@@ -27,7 +26,7 @@ form {
     flex-direction: column;
     align-items: center;
 }
-#form-container{
+.form-container{
     width: 30%;
     padding: 20px;
     background-color: rgba(162, 225, 196, 0.3);
@@ -98,8 +97,7 @@ button:hover {
     cursor: not-allowed;
 }
 
-/* Estilo para los formularios ocultos */
-#register-form {
+#register-form-container {
     display: none;
 }
 
